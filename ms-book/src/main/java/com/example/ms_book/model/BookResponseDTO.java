@@ -9,4 +9,6 @@ public class BookResponseDTO extends BaseResponseDTO {
     private String isbn;
     private String title;
     private String author;
+    private boolean borrowFlag;
+    private String borrowBy;
 }

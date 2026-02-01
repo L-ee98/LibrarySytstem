@@ -13,6 +13,6 @@ import java.util.UUID;
 public interface BookRepository extends JpaRepository<Book, UUID> {
     Page<Book> findAllByStatusCode(String statusCode, Pageable pageable);
     Optional<Book> findFirstByIsbn(String isbn);
-    Optional<Book> findByIdAndReserveFlagAndStatusCode(UUID bookId, boolean reserveBy, String statusCode);
-    int countByReserveBy(UUID borrowerId);
+    Optional<Book> findByIdAndBorrowFlagAndStatusCode(UUID bookId, boolean reserveBy, String statusCode);
+    int countByBorrowBy(UUID borrowerId);
 }

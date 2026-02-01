@@ -12,7 +12,7 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface BorrowerMapper {
 
-    @Mapping(target = "borrowLimitRemaining", constant = "5")
+    @Mapping(target = "borrowLimitRemaining", constant = "2")
     Borrower toEntity(BorrowerRequestDTO bookRequestDTO);
 
     BorrowerResponseDTO toResponse(Borrower borrower);

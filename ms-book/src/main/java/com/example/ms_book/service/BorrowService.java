@@ -8,13 +8,17 @@ import com.example.ms_book.exception.GenericBadException;
 import com.example.ms_book.mapper.BookMapper;
 import com.example.ms_book.model.BookResponseDTO;
 import com.example.ms_book.model.BorrowBookDTO;
-import com.example.ms_book.model.BorrowerRequestDTO;
+import com.example.ms_book.model.BorrowLimitRequestDTO;
+import com.example.ms_book.model.ReturnBookDTO;
 import com.example.ms_book.repository.BookRepository;
 import com.example.ms_book.util.ValidateUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,45 +29,60 @@ public class BorrowService {
     private final BookMapper bookMapper;
     private final BorrowerClient borrowerClient;
 
+    @Value("${borrow.limit}")
+    private int borrowLimit;
+
     @Transactional
     public BookResponseDTO borrowBook(BorrowBookDTO borrowBookDTO) {
+        log.info("[BorrowService|borrowBook] Validate borrowBookDTO");
         ValidateUtil.validate(borrowBookDTO);
 
-        Book book = bookRepository.findByIdAndReserveFlagAndStatusCode(borrowBookDTO.getBookId(), false, StatusCode.ACTIVE.getCode())
+        log.info("[BorrowService|borrowBook] Find the book to borrow");
+        Book book = bookRepository.findByIdAndBorrowFlagAndStatusCode(borrowBookDTO.getBookId(), false, StatusCode.ACTIVE.getCode())
                 .orElseThrow(() -> new GenericBadException(BookError.BOOK_UNAVAILABLE));
-        book.setReserveBy(borrowBookDTO.getBorrowerId());
-        book.setReserveFlag(true);
+        book.setBorrowBy(borrowBookDTO.getBorrowerId());
+        book.setBorrowFlag(true);
         bookRepository.saveAndFlush(book);
 
-        int numOfBookReserveByBorrower = bookRepository.countByReserveBy(borrowBookDTO.getBorrowerId());
-        if (numOfBookReserveByBorrower >= 5) {
-            throw new GenericBadException(BookError.BORROW_LIMIT_EXCEED);
+        int numOfBookReserveByBorrower = bookRepository.countByBorrowBy(borrowBookDTO.getBorrowerId());
+        log.info("[BorrowService|borrowBook] Number of book reserved by borrower is: {}", numOfBookReserveByBorrower);
+
+        if (numOfBookReserveByBorrower > borrowLimit) {
+            throw new GenericBadException(BookError.BORROW_LIMIT_EXCEED.getCode(), BookError.BORROW_LIMIT_EXCEED.getDescription().replace("{}", String.valueOf(borrowLimit)));
         }
 
-        BorrowerRequestDTO borrowerRequestDTO = new BorrowerRequestDTO();
-        borrowerRequestDTO.setId(borrowBookDTO.getBorrowerId());
-        borrowerRequestDTO.setBorrowLimitRemaining(5-numOfBookReserveByBorrower);
-        borrowerClient.updateBorrowLimit(borrowerRequestDTO);
+        log.info("[BorrowService|borrowBook] Prepare to update borrower limit remaining");
+        BorrowLimitRequestDTO borrowLimitRequestDTO = new BorrowLimitRequestDTO();
+        borrowLimitRequestDTO.setId(borrowBookDTO.getBorrowerId());
+        borrowLimitRequestDTO.setBorrowLimitRemaining(borrowLimit-numOfBookReserveByBorrower);
+        borrowerClient.updateBorrowLimit(borrowLimitRequestDTO);
+        log.info("[BorrowService|borrowBook] Successfully updated borrower limit remaining");
 
         return bookMapper.toResponse(book);
     }
 
     @Transactional
-    public BookResponseDTO returnBook(BorrowBookDTO borrowBookDTO) {
-        ValidateUtil.validate(borrowBookDTO);
+    public BookResponseDTO returnBook(ReturnBookDTO returnBookDTO) {
+        log.info("[BorrowService|returnBook] Validate returnBookDTO");
+        ValidateUtil.validate(returnBookDTO);
 
-        Book book = bookRepository.findByIdAndReserveFlagAndStatusCode(borrowBookDTO.getBookId(), true, StatusCode.ACTIVE.getCode())
-                .orElseThrow(() -> new GenericBadException(BookError.BOOK_NOT_FOUND));
-        book.setReserveFlag(false);
-        book.setReserveBy(null);
+        log.info("[BorrowService|returnBook] Find the book to return");
+        Book book = bookRepository.findByIdAndBorrowFlagAndStatusCode(returnBookDTO.getBookId(), true, StatusCode.ACTIVE.getCode())
+                .orElseThrow(() -> new GenericBadException(BookError.BOOK_NOT_BORROWED));
+        UUID borrowerId = book.getBorrowBy();
+
+        book.setBorrowFlag(false);
+        book.setBorrowBy(null);
         bookRepository.saveAndFlush(book);
 
-        int numOfBookReserveByBorrower = bookRepository.countByReserveBy(book.getReserveBy());
+        int numOfBookReserveByBorrower = bookRepository.countByBorrowBy(borrowerId);
 
-        BorrowerRequestDTO borrowerRequestDTO = new BorrowerRequestDTO();
-        borrowerRequestDTO.setId(borrowBookDTO.getBorrowerId());
-        borrowerRequestDTO.setBorrowLimitRemaining(5-numOfBookReserveByBorrower);
-        borrowerClient.updateBorrowLimit(borrowerRequestDTO);
+        log.info("[BorrowService|returnBook] Prepare to update borrower limit remaining");
+        BorrowLimitRequestDTO borrowLimitRequestDTO = new BorrowLimitRequestDTO();
+        borrowLimitRequestDTO.setId(borrowerId);
+        borrowLimitRequestDTO.setBorrowLimitRemaining(borrowLimit-numOfBookReserveByBorrower);
+        borrowerClient.updateBorrowLimit(borrowLimitRequestDTO);
+        log.info("[BorrowService|returnBook] Successfully updated borrower limit remaining");
 
         return bookMapper.toResponse(book);
     }

@@ -12,7 +12,7 @@ import java.util.UUID;
 public class BorrowerResponseDTO extends BaseResponseDTO {
 
     private UUID id;
-    private String name;
+    private String username;
     private String email;
-    private int maxBorrowLimit;
+    private int borrowLimitRemaining;
 }

@@ -1,6 +1,6 @@
 package com.example.ms_book.client;
 
-import com.example.ms_book.model.BorrowerRequestDTO;
+import com.example.ms_book.model.BorrowLimitRequestDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +14,6 @@ public interface BorrowerClient {
 
     @RequestMapping(method = RequestMethod.PATCH, value = "update-borrow-limit")
     void updateBorrowLimit(
-            @RequestBody BorrowerRequestDTO borrowerRequestDTO
+            @RequestBody BorrowLimitRequestDTO borrowLimitRequestDTO
     );
 }

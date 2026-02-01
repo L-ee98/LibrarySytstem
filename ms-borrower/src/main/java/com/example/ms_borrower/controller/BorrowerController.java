@@ -1,5 +1,6 @@
 package com.example.ms_borrower.controller;
 
+import com.example.ms_borrower.model.BorrowLimitRequestDTO;
 import com.example.ms_borrower.model.BorrowerRequestDTO;
 import com.example.ms_borrower.model.BorrowerResponseDTO;
 import com.example.ms_borrower.service.BorrowerService;
@@ -48,10 +49,10 @@ public class BorrowerController {
 
     @PatchMapping("update-borrow-limit")
     public ResponseEntity<Void> updateBorrowLimit (
-            @RequestBody BorrowerRequestDTO borrowerRequestDTO
+            @RequestBody BorrowLimitRequestDTO borrowLimitRequestDTO
     ) {
-        log.info("[BorrowerController|updateBorrowLimit] Request: {}", borrowerRequestDTO.toString());
-        borrowerService.updateBorrowLimit(borrowerRequestDTO);
+        log.info("[BorrowerController|updateBorrowLimit] Request: {}", borrowLimitRequestDTO.toString());
+        borrowerService.updateBorrowLimit(borrowLimitRequestDTO);
         log.info("[BorrowerController|updateBorrowLimit] Successfully updated borrow limit.");
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

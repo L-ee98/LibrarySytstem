@@ -23,9 +23,9 @@ public class Book extends BaseEntity {
     @Column(name = "author")
     private String author;
 
-    @Column(name = "reserve_flag")
-    private boolean reserveFlag;
+    @Column(name = "borrow_flag")
+    private boolean borrowFlag;
 
-    @Column(name = "reserve_by")
-    private UUID reserveBy;
+    @Column(name = "borrow_by")
+    private UUID borrowBy;
 }

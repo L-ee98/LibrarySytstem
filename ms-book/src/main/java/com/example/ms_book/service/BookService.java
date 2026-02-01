@@ -25,8 +25,10 @@ public class BookService {
 
     @Transactional
     public BookResponseDTO createBook(BookRequestDTO bookRequestDTO) {
+        log.info("[BookService|createBook] Validate bookRequestDTO");
         bookValidateService.validateBook(bookRequestDTO);
 
+        log.info("[BookService|createBook] Convert DTO to Entity");
         Book book = bookMapper.toEntity(bookRequestDTO);
         book = bookRepository.save(book);
 
@@ -34,6 +36,7 @@ public class BookService {
     }
 
     public Page<BookResponseDTO> getBookList(Pageable pageable) {
+        log.info("[BookService|getBookList] Retrieve book list");
         Page<Book> bookPage = bookRepository.findAllByStatusCode(StatusCode.ACTIVE.getCode(), pageable);
         return bookPage.map(bookMapper::toResponse);
     }

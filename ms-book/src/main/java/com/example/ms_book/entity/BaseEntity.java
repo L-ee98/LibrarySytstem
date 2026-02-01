@@ -44,6 +44,7 @@ public class BaseEntity {
     @PrePersist
     public void prePersist() {
         createdBy = BookCommonConstant.SYS;
+        createdTime = LocalDateTime.now();
         statusCode = StatusCode.ACTIVE.getCode();
     }
 
