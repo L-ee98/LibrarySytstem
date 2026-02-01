@@ -1,0 +1,265 @@
+{
+  "info": {
+    "_postman_id": "3bd077d9-0d9c-41f2-b7da-775af13be148",
+    "name": "LibrarySystem",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Book",
+      "item": [
+        {
+          "name": "Create Book",
+          "id": "42dc905f-d126-4572-b298-14ba502906b6",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"isbn\": \"9781788171823\",\n    \"author\": \"Vex King\",\n    \"title\": \"Good Vibes, Good Life: How Self-Love Is the Key to Unlocking Your Greatness\" \n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/book/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "book",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Book List",
+          "id": "4959820f-ce4b-4ede-a047-d6eea19c8127",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/v1/book/list?page=0&size=10&sortBy=createdTime&sortOrder=ASC",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "book",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "uuid": "34be043b-517d-4783-bc8b-4223f47c3d1a"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "uuid": "201dae0b-754f-4d12-9c9b-2192f4cd8e35"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdTime",
+                  "uuid": "40e2996f-a072-49fa-a68f-bb9e269771ef"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "ASC",
+                  "uuid": "cf938def-90af-46e6-8781-b0ae756c76df"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrow Book",
+          "id": "b3fd57b2-3d3d-41f0-bb75-c70ad7231c36",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"borrowerId\": \"839d9ae2-0248-4c0e-9c5f-8bae3705e4b2\",\n    \"bookId\": \"9c477d5d-5a43-4c23-bdd9-a07fac038fc2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/borrow",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "borrow"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Return Book",
+          "id": "be6a9702-34b1-4491-a126-5c4dfb919c8e",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"bookId\": \"9c477d5d-5a43-4c23-bdd9-a07fac038fc2\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/v1/borrow/return",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "v1",
+                "borrow",
+                "return"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "91c4894f-6e99-4db9-8575-2096690cf746"
+    },
+    {
+      "name": "Borrower",
+      "item": [
+        {
+          "name": "Create Borrower",
+          "id": "ace24f06-8d8a-4841-9238-2d74ee8226e8",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"Lee\",\n    \"email\": \"lee@abc.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8081/v1/borrower/create",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "v1",
+                "borrower",
+                "create"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Borrower List",
+          "id": "e7edaa67-91c6-4e54-a71e-2632975a741b",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8081/v1/borrower/list?page=0&size=10&sortBy=createdTime&sortOrder=ASC",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8081",
+              "path": [
+                "v1",
+                "borrower",
+                "list"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "0",
+                  "uuid": "5fad18d2-be73-439b-b30e-36a3e735e9eb"
+                },
+                {
+                  "key": "size",
+                  "value": "10",
+                  "uuid": "d3b26341-cfb8-4b5b-9631-ce52ffea15a4"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "createdTime",
+                  "uuid": "315f65d7-f4aa-48b3-9a78-9509c74a3f48"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "ASC",
+                  "uuid": "8e52b0ae-dc35-4755-9e81-9d82b2616df9"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "id": "94fb782b-c2c2-4cc9-b4c2-15ed0c7df06a"
+    }
+  ]
+}
