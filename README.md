@@ -33,16 +33,41 @@ This project is a simple library system. It consists of two microservices:
 - Maven 3.9.11
 
 ### Installation
-1. Build each of the project using Maven:
-    ```
+This repository contains multiple microservices.
+Each microservice is an independent Maven project with its own pom.xml.
+
+When opening the project for the first time in IDE, please follow these steps:
+
+1. Open the project root folder in IDE.
+
+For each microservice directory:
+
+2. Right-click the pom.xml
+
+3. Select “Add as Maven Project”
+
+Once all Maven projects are loaded, run the following command for each microservice:
+
     mvn clean install
-    ```
 
 ### Running the Application
-1. Using Maven:
-    ```
-    mvn spring-boot:run
-    ```
+
+1. Run database migration first
+
+   Navigate to the `library-db-migration` module and start the service to trigger Flyway to create/update the database schema:
+   ```bash
+   cd library-db-migration
+   mvn spring-boot:run
+
+2. Run the microservices
+
+    After the database is ready, navigate to each microservice and start it:
+    ```bash
+   cd ms-book
+   mvn spring-boot:run
+   
+   cd ms-borrower
+   mvn spring-boot:run
 
 - **ms-book**: will be accessible at `http://localhost:8080`.  
 - **ms-borrower**: will be accessible at `http://localhost:8081`.
