@@ -2,18 +2,13 @@ package com.example.ms_borrower.exception;
 
 import com.example.ms_borrower.enums.BorrowerError;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
 @Getter
 public class GenericBadException extends RuntimeException {
     private String errorCode;
     private String errorDescription;
-
-    public GenericBadException() {
-    }
-
-    public GenericBadException(String message) {
-        super(message);
-    }
 
     public GenericBadException(BorrowerError error) {
         super(error.getDescription());
@@ -25,17 +20,5 @@ public class GenericBadException extends RuntimeException {
         super(errorDescription);
         this.errorCode = errorCode;
         this.errorDescription = errorDescription;
-    }
-
-    public GenericBadException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public GenericBadException(Throwable cause) {
-        super(cause);
-    }
-
-    public GenericBadException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }
